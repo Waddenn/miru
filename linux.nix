@@ -1,6 +1,7 @@
 {
   fetchurl,
   appimageTools,
+  makeWrapper,
   pname,
   version,
   meta,
@@ -20,15 +21,20 @@ appimageTools.wrapType2 rec {
     hash = "sha256-nLPqEI6u5NNQ/kPbXRWPG0pIwutKNK2J8JeTPN6wHlg=";
   };
 
+  nativeBuildInputs = [makeWrapper];
+
   extraInstallCommands = let
-    contents = appimageTools.extractType2 {inherit pname version src;};
+    contents = appimageTools.extractType2 {
+      inherit pname version src;
+    };
   in ''
     mkdir -p "$out/share/applications"
     mkdir -p "$out/share/lib/miru"
     cp -r ${contents}/{locales,resources} "$out/share/lib/miru"
     cp -r ${contents}/usr/* "$out"
     cp "${contents}/${pname}.desktop" "$out/share/applications/"
-    substituteInPlace $out/share/applications/${pname}.desktop --replace 'Exec=AppRun' 'Exec=${pname}'
+    substituteInPlace $out/share/applications/${pname}.desktop \
+      --replace 'Exec=AppRun' 'Exec=${pname}'
     wrapProgram "$out/bin/${pname}" \
       --set APPIMAGE "$out/bin/${pname}"
   '';

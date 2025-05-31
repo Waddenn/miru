@@ -17,7 +17,7 @@
         });
   in {
     packages = forAllSystems ({pkgs, ...}: {
-      default = pkgs.callPackage ./default.nix {};
+      default = pkgs.callPackage ./package.nix {};
     });
 
     apps = forAllSystems ({
