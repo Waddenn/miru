@@ -17,7 +17,7 @@
         });
   in {
     packages = forAllSystems ({pkgs, ...}: {
-      default = pkgs.callPackage ./package.nix {};
+      miru = pkgs.callPackage ./package.nix {};
     });
 
     apps = forAllSystems ({
